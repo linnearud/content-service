@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer-api
+  name: consumer-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer-api
+  template:
+    metadata:
+      labels:
+        app: consumer-api
+    spec:
+      containers:
+      - image: consumer-api
+        name: consumer-api
+        imagePullPolicy: Never
+        env:
+          - name: NODE_ENVIRONMENT
+            value: production
+          - name: MYSQL_USER
+            value: consumer-api
+          - name: MYSQL_HOST
+            value: cloud-host
+          - name: MYSQL_PORT
+            value: '3306'
+        envFrom:
+        - secretRef:
+           name: consumer-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consumer-api-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: consumer-api
+  ports:
+  - port: 8002
+    targetPort: 8002
+    nodePort: 30002

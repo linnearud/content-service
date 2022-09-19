@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sender-api
+  name: sender-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sender-api
+  template:
+    metadata:
+      labels:
+        app: sender-api
+    spec:
+      containers:
+      - image: sender-api
+        name: sender-api
+        imagePullPolicy: Never
+        env:
+          - name: NODE_ENVIRONMENT
+            value: production
+          - name: MYSQL_USER
+            value: sender-api
+          - name: MYSQL_HOST
+            value: cloud-host
+          - name: MYSQL_PORT
+            value: '3306'
+        envFrom:
+        - secretRef:
+           name: sender-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sender-api-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: sender-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30001
