@@ -1,0 +1,16 @@
+USE `content-service`;
+CREATE TABLE IF NOT EXISTS `file` (
+	`fileId` BIGINT PRIMARY KEY AUTO_INCREMENT,
+	`receiverId` VARCHAR(255) NOT NULL,
+	`senderId` VARCHAR(255) NOT NULL,
+	`fileType` VARCHAR(255) NOT NULL,
+	`isPayable` BOOLEAN NOT NULL,
+	`isPaid` BOOLEAN DEFAULT FALSE NOT NULL
+);
+CREATE TABLE IF NOT EXISTS `fileContent` (
+	`fileContentId` BIGINT PRIMARY KEY AUTO_INCREMENT,
+	`blob` BLOB NOT NULL,
+	`fileId` BIGINT UNIQUE NOT NULL,
+	CONSTRAINT fk_content_file
+	FOREIGN KEY (fileId) REFERENCES file(fileId)
+);
