@@ -3,23 +3,26 @@
 ## Sender API
 
 Endpoints:
-* POST `/api/sender/files` 
-  Creates a new file
-  Accepts a form-encoded body
-  Required fields: "file" (file), "senderId" (string), "receiverId" (string), "fileType" (string), "isPayable" ("true" / anything else interpreted as false)
+* POST `/api/sender/files`.  
+  Creates a new file.  
+  Accepts a form-data body  
+  Required fields: "file" (file), "senderId" (string), "receiverId" (string), "fileType" (string), "isPayable" ("true" / anything else interpreted as false).  
+  Returns 400/500/200
 
 ## Consumer API
 
 Endpoints
-* GET `api/consumer/files`
-  Get a list of all files (does not include content)
-  Accepts query parameters used to filter files
-  (TODO: Paginate result)
-* GET `api/consumer/files/:id/content`
-  Get file content
-  Returns 403 if content is not paid
-* POST `api/consumer/files/:id/payment`
-  Initiate payment for file
+* GET `api/consumer/files`.  
+  Get a list of all files (does not include content).  
+  Accepts query parameters used to filter files.  
+  (TODO: Paginate result).  
+  Returns 404/500/200
+* GET `api/consumer/files/:id/content`. 
+  Get file content.  
+  Returns 404/403 (not paid)/500/200
+* POST `api/consumer/files/:id/payment`. 
+  Initiate payment for file.  
+  Returns 500/200
 
 
 ## Run locally
