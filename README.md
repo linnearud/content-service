@@ -1,9 +1,32 @@
 # content-service
 
+## Sender API
+
+Endpoints:
+* POST `/api/sender/files` 
+  Creates a new file
+  Accepts a form-encoded body
+  Required fields: "file" (file), "senderId" (string), "receiverId" (string), "fileType" (string), "isPayable" ("true" / anything else interpreted as false)
+
+## Consumer API
+
+Endpoints
+* GET `api/consumer/files`
+  Get a list of all files (does not include content)
+  Accepts query parameters used to filter files
+  (TODO: Paginate result)
+* GET `api/consumer/files/:id/content`
+  Get file content
+  Returns 403 if content is not paid
+* POST `api/consumer/files/:id/payment`
+  Initiate payment for file
+
+
 ## Run locally
 Prerequisities: [Docker](https://docs.docker.com/get-started/#download-and-install-docker) & (Docker Compose)[https://docs.docker.com/compose/install/]. 
 
 `docker-compose -f docker-compose-local.yml build`
+
 `docker-compose -f docker-compose-local.yml up`
 
 Docker compose will start:
@@ -25,3 +48,8 @@ Docker compose will start:
 * Managed SQL database (Cloud SQL/Amazon RDS)
 * Deploy to Kubernetes (if existing infra), or other cloud service (e.g. Cloud Run)
 * Assume existing authentication service used for issuing tokens
+
+## Other thoughts
+* Separate versions for Sender/Consumer (Versioning not implemented here)
+* Better logging needed
+* Documentation needed
